@@ -37,8 +37,8 @@ class Regression:
             Ex = [0 for j in range(self.featuresNumber+1)]
 
             for i in range(len(self.df.T[0])):
-                error = self.h(self.df.T[:-1][i])
-                E[epoca] += (error ** 2) / (2 * len(self.df))
+                error = self.h(self.df.T[:-1][i]) - self.df.T[i][-1]
+                E[epoca] += np.power(error, 2) / (2 * len(self.df))
                 Ex[0] += error
                 for j in range(self.featuresNumber):
                     Ex[j+1] += (error * self.df.T[:-1][i][j]) / (len(self.df))
@@ -46,8 +46,8 @@ class Regression:
             for i in range(self.featuresNumber+1):
                 self.t[i] = self.t[i] + self.alpha * Ex[i]
 
+        print(self.t)
         plot_2d(results=np.array(self.df), expected=[], labels=['população', 'lucro'], block=True)
 
-rg = Regression(0.1, 100, "./data2.txt", ['population', 'profit','dd'])
+rg = Regression(0.1, 100, "./data1.txt", ['population', 'profit'])
 rg.execute()
-
