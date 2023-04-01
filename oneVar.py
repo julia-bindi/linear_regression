@@ -20,13 +20,13 @@ def plot_2d(results: np.array, expected:np.array, labels=[''], title='', block=F
 class Regression:
     
     def __init__(self, alpha, epocas, file, labels = [], featuresNumber = 1):
-        self.t = [np.random.rand() for j in range(featuresNumber+1)]
+        self.t = [np.random.rand() for _ in range(featuresNumber+1)]
         self.alpha = alpha
         self.epocas = epocas
         self.df = pd.read_csv(filepath_or_buffer=file, names=labels)
         self.labels = labels
         self.featuresNumber = featuresNumber
-        self.E = [0 for i in range(epocas)]
+        self.E = [0 for _ in range(epocas)]
 
     def h(self, x = []):
         return self.t[0] + sum(self.t[i+1]*x[i] for i in range(self.featuresNumber))
@@ -35,7 +35,7 @@ class Regression:
         plot_2d(results=np.array(self.df), expected=[], labels=self.labels, block=True)
 
     def plotRegression2d(self):
-        plot_2d(results=np.array(self.df), expected=np.array([[self.df.T[:-1][i],self.h(self.df.T[:-1][i])] for i in range(len(self.df))]), labels=self.labels, block=True)
+        plot_2d(results=np.array(self.df), expected=np.array([[self.df.T[:-1][i][0],self.h(self.df.T[:-1][i])] for i in range(len(self.df))]), labels=self.labels, block=True)
 
     def plotError(self):
         plot_2d(results=[], expected=np.array([[i,self.E[i]] for i in range(self.epocas)]), labels=['Época', 'Erro'], block=True)
