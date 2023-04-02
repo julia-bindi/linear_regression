@@ -1,5 +1,5 @@
 # Tarefa - Regressão Linear com Uma e Múltiplas Variáveis
-# Parte 1 - Regressão linear com uma variável
+# Parte 2 - Regressão linear com múltiplas variáveis
 #
 ## Arthur Lopes Sabioni
 ## Julia Bindi Alencar de Jesus
@@ -38,13 +38,17 @@ class Regression:
         return self.t[0] + sum(self.t[i+1]*x[i] for i in range(self.featuresNumber))
 
     def plotData(self):
-        plot_2d(results=np.array(self.df), expected=[], labels=self.labels, block=True)
-
-    def plotRegression2d(self):
-        plot_2d(results=np.array(self.df), expected=np.array([[self.df.T[:-1][i][0],self.h(self.df.T[:-1][i])] for i in range(len(self.df))]), labels=self.labels, block=True)
+        plot_2d(results=np.array(self.df[self.labels[1:3]]), expected=[], labels=self.labels[1:3], block=False)
+        plot_2d(results=np.array(self.df[[self.labels[0], self.labels[2]]]), expected=[], labels=[self.labels[0], self.labels[2]], block=True)
 
     def plotError(self):
         plot_2d(results=[], expected=np.array([[i,self.E[i]] for i in range(self.epocas)]), labels=['Época', 'Erro'], block=True)
+        
+    def normalize(self):
+        for i in range(len(self.labels) - 1):
+            mean = np.mean(np.array(self.df[[self.labels[i]]]))
+            std = np.std(np.array(self.df[[self.labels[i]]]))
+            self.df[self.labels[i]] = [(x - mean) / std for x in self.df[self.labels[i]]]
 
     def execute(self):
 
@@ -65,8 +69,9 @@ class Regression:
         print(self.t)
 
 if __name__ == "__main__":
-    rg = Regression(0.01, 1000, "./data1.txt", ['population', 'profit'])
-    rg.execute()
+    rg = Regression(0.01, 1000, "./data2.txt", ['size', 'rooms', 'value'], 2)
     rg.plotData()
-    rg.plotRegression2d()
+    rg.normalize()
+    rg.plotData()
+    rg.execute()
     rg.plotError()
